@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name="biotech_sentiment",
     version="0.1",
-    packages=find_packages(),
+    packages=find_packages(include=['biotech_sentiment', 'biotech_sentiment.*']),
     install_requires=[
         'streamlit>=1.29.0',
         'plotly>=5.18.0',
