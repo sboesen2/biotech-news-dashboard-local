@@ -3,11 +3,11 @@ import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
 from datetime import datetime, timedelta
-from biotech_sentiment.scrapers.news_scraper import BiotechNewsScraper
 import logging
 from functools import lru_cache
 import time
 import nltk
+from scrapers.news_scraper import BiotechNewsScraper
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
