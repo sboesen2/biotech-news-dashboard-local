@@ -23,8 +23,6 @@ A Streamlit dashboard that analyzes sentiment in biotech and pharmaceutical news
    ```
 6. Run the app: `streamlit run biotech_sentiment/app/streamlit_app.py`
 
-6. Run the app: `streamlit run biotech_sentiment/app/streamlit_app.py`
-
 ## 🚨 Important API Notes
 - **Local Development Only**: NewsAPI.org functionality is restricted to localhost
 - **Online Deployment**: GNews API works for both local and online deployment
