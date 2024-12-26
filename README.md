@@ -23,5 +23,39 @@ A Streamlit dashboard that analyzes sentiment in biotech and pharmaceutical news
    ```
 6. Run the app: `streamlit run biotech_sentiment/app/streamlit_app.py`
 
-## Live Demo
-[Link to Streamlit Cloud deployment] 
+6. Run the app: `streamlit run biotech_sentiment/app/streamlit_app.py`
+
+## 🚨 Important API Notes
+- **Local Development Only**: NewsAPI.org functionality is restricted to localhost
+- **Online Deployment**: GNews API works for both local and online deployment
+- The app automatically switches between APIs based on usage limits
+
+## 🌟 Key Features
+
+### Interactive Visualizations
+- Sentiment trends over time
+- Company comparison charts
+- Source distribution analysis
+- Top positive articles ranking
+
+### Smart API Management
+- Automatic API switching
+- Usage tracking and rate limiting
+- Response caching
+- Error handling
+
+## 🔄 Future Contributions Welcome
+
+Areas for enhancement:
+1. Additional news API integrations
+2. Enhanced sentiment algorithms
+3. More visualization options
+4. Industry-specific keyword analysis
+5. Historical data storage
+6. Machine learning integration
+7. Custom company watchlists
+8. Email alerts for sentiment changes
+
+## License
+
+MIT License
