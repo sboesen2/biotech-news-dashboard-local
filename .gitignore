@@ -27,11 +27,24 @@ ENV/
 
 # Environment Variables
 .env
+.env.local
+.env.*
 
 # Data
 data/historical/
 data/api_usage.json
+*.log
+logs/
 
 # IDE
 .idea/
-.vscode/ 
+.vscode/
+
+# OS specific
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Streamlit
+.streamlit/secrets.toml 
