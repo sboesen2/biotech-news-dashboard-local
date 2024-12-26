@@ -7,7 +7,7 @@ import logging
 from functools import lru_cache
 import time
 import nltk
-from scrapers.news_scraper import BiotechNewsScraper
+from biotech_sentiment.scrapers.news_scraper import BiotechNewsScraper
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
