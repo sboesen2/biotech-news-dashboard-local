@@ -3,12 +3,11 @@ import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
 from datetime import datetime, timedelta
+from biotech_sentiment.scrapers.news_scraper import BiotechNewsScraper
 import logging
 from functools import lru_cache
 import time
 import nltk
-from biotech_sentiment.scrapers.news_scraper import BiotechNewsScraper
-import requests
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -68,50 +67,8 @@ def fetch_company_news(_scraper, company, days):
         logging.error(f"Error in fetch_company_news: {str(e)}")
         return []
 
-def verify_api_keys():
-    """Verify API keys are properly configured"""
-    try:
-        scraper = BiotechNewsScraper()
-        
-        # Debug output
-        st.write("Checking API Keys...")
-        
-        # Test NewsAPI
-        newsapi_params = {'q': 'test', 'apiKey': scraper.api_keys['newsapi']}
-        response = requests.get(scraper.base_urls['newsapi'], params=newsapi_params)
-        
-        st.write(f"NewsAPI Status Code: {response.status_code}")
-        if response.status_code == 401:
-            st.error(f"""
-            ❌ NewsAPI key is invalid or not properly configured
-            URL: {scraper.base_urls['newsapi']}
-            Key Used: {scraper.api_keys['newsapi']}
-            """)
-            return False
-        
-        # Test GNews
-        gnews_params = {'q': 'test', 'token': scraper.api_keys['gnews']}
-        response = requests.get(scraper.base_urls['gnews'], params=gnews_params)
-        
-        st.write(f"GNews Status Code: {response.status_code}")
-        if response.status_code == 401:
-            st.error("❌ GNews key is invalid or not properly configured")
-            return False
-            
-        st.success("✅ API keys verified successfully")
-        return True
-        
-    except Exception as e:
-        st.error(f"Error verifying API keys: {str(e)}")
-        return False
-
 def create_sentiment_dashboard():
     st.title("Biotech News Sentiment Analyzer")
-    
-    # Move API verification to the start
-    if not verify_api_keys():
-        st.error("API keys verification failed. Please check your Streamlit secrets configuration.")
-        st.stop()
     
     # Initialize session state for tracking
     if 'cache_hits' not in st.session_state:
@@ -356,10 +313,6 @@ def create_sentiment_dashboard():
                 st.metric("GNews", f"{gnews_usage}/100",
                          delta=100-gnews_usage,
                          delta_color="inverse")
-
-    # Add this check
-    if not verify_api_keys():
-        st.stop()
 
 if __name__ == "__main__":
     create_sentiment_dashboard() 

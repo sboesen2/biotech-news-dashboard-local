@@ -1,0 +1,11 @@
+setup.py
+biotech_sentiment/__init__.py
+biotech_sentiment.egg-info/PKG-INFO
+biotech_sentiment.egg-info/SOURCES.txt
+biotech_sentiment.egg-info/dependency_links.txt
+biotech_sentiment.egg-info/requires.txt
+biotech_sentiment.egg-info/top_level.txt
+biotech_sentiment/app/__init__.py
+biotech_sentiment/app/streamlit_app.py
+biotech_sentiment/scrapers/__init__.py
+biotech_sentiment/scrapers/news_scraper.py

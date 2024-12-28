@@ -1,0 +1,7 @@
+streamlit
+plotly
+pandas
+python-dotenv
+textblob
+newsapi-python
+gnews

@@ -12,7 +12,6 @@ from nltk.sentiment import SentimentIntensityAnalyzer
 from nltk import pos_tag, word_tokenize, ne_chunk
 from nltk.corpus import stopwords
 import nltk
-import streamlit as st
 
 class BiotechNewsScraper:
     def __init__(self):
@@ -41,8 +40,8 @@ class BiotechNewsScraper:
 
         # API setup
         self.api_keys = {
-            'newsapi': os.getenv('NEWSAPI_KEY') or st.secrets['NEWSAPI_KEY'],
-            'gnews': os.getenv('GNEWS_KEY') or st.secrets['GNEWS_KEY'],
+            'newsapi': os.getenv('NEWSAPI_KEY'),
+            'gnews': os.getenv('GNEWS_KEY'),
         }
         self.base_urls = {
             'newsapi': 'https://newsapi.org/v2/everything',
@@ -141,15 +140,6 @@ class BiotechNewsScraper:
             logging.error(f"Error with {self.current_api}: {str(e)}")
             return []
     
-    def _sanitize_params(self, params: dict) -> dict:
-        """Remove sensitive data from params before logging"""
-        safe_params = params.copy()
-        if 'apiKey' in safe_params:
-            safe_params['apiKey'] = '***'
-        if 'token' in safe_params:
-            safe_params['token'] = '***'
-        return safe_params
-
     @lru_cache(maxsize=100)
     def _get_newsapi_articles(self, company_name: str, days_back: int) -> List[Dict]:
         """Get articles from NewsAPI with caching"""
@@ -163,27 +153,21 @@ class BiotechNewsScraper:
         }
         
         try:
-            # Log sanitized parameters
-            safe_params = self._sanitize_params(params)
-            logging.debug(f"NewsAPI Request Parameters: {safe_params}")
-            
             response = requests.get(self.base_urls['newsapi'], params=params)
             self._increment_usage('newsapi')
             
-            # Only log status code and article count
+            # Modify logging to exclude sensitive data
             logging.info(f"NewsAPI Response Status: {response.status_code}")
-            
-            if response.status_code == 200:
-                data = response.json()
-                if data.get('status') == 'error':
-                    logging.error("NewsAPI returned error status")
-                    return []
-                articles = data.get('articles', [])
-                logging.info(f"Retrieved {len(articles)} articles from NewsAPI")
-                return articles
-            else:
+            if response.status_code != 200:
+                # Log error without exposing full response
                 logging.error(f"NewsAPI Error Status: {response.status_code}")
                 return []
+                
+            data = response.json()
+            if data.get('status') == 'error':
+                logging.error(f"NewsAPI Error: {data.get('message')}")
+                return []
+            return data.get('articles', [])
             
         except Exception as e:
             logging.error(f"Exception in _get_newsapi_articles: {str(e)}")
@@ -196,30 +180,17 @@ class BiotechNewsScraper:
             'q': f'{company_name} biotech',
             'token': self.api_keys['gnews'],
             'lang': 'en',
-            'max': 100,
+            'max': 100,  # Maximum allowed in free tier
             'sortby': 'publishedAt',
-            'in': 'title,description,content'
+            # Add more specific parameters for better ML data
+            'in': 'title,description,content'  # Search in all text fields
         }
+        response = requests.get(self.base_urls['gnews'], params=params)
+        self._increment_usage('gnews')
         
-        try:
-            # Log sanitized parameters
-            safe_params = self._sanitize_params(params)
-            logging.debug(f"GNews Request Parameters: {safe_params}")
-            
-            response = requests.get(self.base_urls['gnews'], params=params)
-            self._increment_usage('gnews')
-            
-            logging.info(f"GNews Response Status: {response.status_code}")
-            
-            if response.status_code == 200:
-                data = response.json()
-                articles = data.get('articles', [])
-                logging.info(f"Retrieved {len(articles)} articles from GNews")
-                return articles
-            return []
-        except Exception as e:
-            logging.error(f"Exception in _get_gnews_articles: {str(e)}")
-            return []
+        if response.status_code == 200:
+            return response.json().get('articles', [])
+        return []
 
     def analyze_sentiment(self, text: str) -> Dict:
         """Advanced sentiment analysis using NLTK VADER"""

@@ -1,0 +1,81 @@
+[33mcommit 95a3e4ed33faad8fa2449a54e980e056f6079750[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Sam Boesen <sam.boesen2@gmail.com>
+Date:   Thu Dec 26 12:53:06 2024 -0700
+
+    Moved API key verification to start of app
+
+[1mdiff --git a/biotech_sentiment/app/streamlit_app.py b/biotech_sentiment/app/streamlit_app.py[m
+[1mindex 625ded8..8e6ea26 100644[m
+[1m--- a/biotech_sentiment/app/streamlit_app.py[m
+[1m+++ b/biotech_sentiment/app/streamlit_app.py[m
+[36m@@ -8,6 +8,7 @@[m [mfrom functools import lru_cache[m
+ import time[m
+ import nltk[m
+ from biotech_sentiment.scrapers.news_scraper import BiotechNewsScraper[m
+[32m+[m[32mimport requests[m
+ [m
+ # Configure logging[m
+ logging.basicConfig(level=logging.INFO)[m
+[36m@@ -67,9 +68,51 @@[m [mdef fetch_company_news(_scraper, company, days):[m
+         logging.error(f"Error in fetch_company_news: {str(e)}")[m
+         return [][m
+ [m
+[32m+[m[32mdef verify_api_keys():[m
+[32m+[m[32m    """Verify API keys are properly configured"""[m
+[32m+[m[32m    try:[m
+[32m+[m[32m        scraper = BiotechNewsScraper()[m
+[32m+[m[41m        [m
+[32m+[m[32m        # Debug output[m
+[32m+[m[32m        st.write("Checking API Keys...")[m
+[32m+[m[41m        [m
+[32m+[m[32m        # Test NewsAPI[m
+[32m+[m[32m        newsapi_params = {'q': 'test', 'apiKey': scraper.api_keys['newsapi']}[m
+[32m+[m[32m        response = requests.get(scraper.base_urls['newsapi'], params=newsapi_params)[m
+[32m+[m[41m        [m
+[32m+[m[32m        st.write(f"NewsAPI Status Code: {response.status_code}")[m
+[32m+[m[32m        if response.status_code == 401:[m
+[32m+[m[32m            st.error(f"""[m
+[32m+[m[32m            ❌ NewsAPI key is invalid or not properly configured[m
+[32m+[m[32m            URL: {scraper.base_urls['newsapi']}[m
+[32m+[m[32m            Key Used: {scraper.api_keys['newsapi']}[m
+[32m+[m[32m            """)[m
+[32m+[m[32m            return False[m
+[32m+[m[41m        [m
+[32m+[m[32m        # Test GNews[m
+[32m+[m[32m        gnews_params = {'q': 'test', 'token': scraper.api_keys['gnews']}[m
+[32m+[m[32m        response = requests.get(scraper.base_urls['gnews'], params=gnews_params)[m
+[32m+[m[41m        [m
+[32m+[m[32m        st.write(f"GNews Status Code: {response.status_code}")[m
+[32m+[m[32m        if response.status_code == 401:[m
+[32m+[m[32m            st.error("❌ GNews key is invalid or not properly configured")[m
+[32m+[m[32m            return False[m
+[32m+[m[41m            [m
+[32m+[m[32m        st.success("✅ API keys verified successfully")[m
+[32m+[m[32m        return True[m
+[32m+[m[41m        [m
+[32m+[m[32m    except Exception as e:[m
+[32m+[m[32m        st.error(f"Error verifying API keys: {str(e)}")[m
+[32m+[m[32m        return False[m
+[32m+[m
+ def create_sentiment_dashboard():[m
+     st.title("Biotech News Sentiment Analyzer")[m
+     [m
+[32m+[m[32m    # Move API verification to the start[m
+[32m+[m[32m    if not verify_api_keys():[m
+[32m+[m[32m        st.error("API keys verification failed. Please check your Streamlit secrets configuration.")[m
+[32m+[m[32m        st.stop()[m
+[32m+[m[41m    [m
+     # Initialize session state for tracking[m
+     if 'cache_hits' not in st.session_state:[m
+         st.session_state.cache_hits = 0[m
+[36m@@ -314,5 +357,9 @@[m [mdef create_sentiment_dashboard():[m
+                          delta=100-gnews_usage,[m
+                          delta_color="inverse")[m
+ [m
+[32m+[m[32m    # Add this check[m
+[32m+[m[32m    if not verify_api_keys():[m
+[32m+[m[32m        st.stop()[m
+[32m+[m
+ if __name__ == "__main__":[m
+     create_sentiment_dashboard() [m
+\ No newline at end of file[m

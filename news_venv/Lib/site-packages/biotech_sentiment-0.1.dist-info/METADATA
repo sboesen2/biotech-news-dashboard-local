@@ -1,0 +1,10 @@
+Metadata-Version: 2.1
+Name: biotech_sentiment
+Version: 0.1
+Requires-Dist: streamlit
+Requires-Dist: plotly
+Requires-Dist: pandas
+Requires-Dist: python-dotenv
+Requires-Dist: textblob
+Requires-Dist: newsapi-python
+Requires-Dist: gnews
