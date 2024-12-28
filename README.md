@@ -1,6 +1,8 @@
 # Biotech News Sentiment Analyzer
-
 A Streamlit dashboard that analyzes sentiment in biotech and pharmaceutical news using NewsAPI and GNews.
+
+## Live Demo
+- A Streamlit dashboard that analyzes sentiment in biotech and pharmaceutical news using NewsAPI and GNews.
 
 ## Features
 - Real-time news sentiment analysis
