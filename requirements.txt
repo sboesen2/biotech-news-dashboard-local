@@ -1,3 +1,4 @@
+-e .  # This tells pip to install your package in editable mode
 streamlit
 plotly
 pandas
