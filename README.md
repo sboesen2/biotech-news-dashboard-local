@@ -2,7 +2,7 @@
 A Streamlit dashboard that analyzes sentiment in biotech and pharmaceutical news using NewsAPI and GNews.
 
 ## Live Demo
-- A Streamlit dashboard that analyzes sentiment in biotech and pharmaceutical news using NewsAPI and GNews.
+- https://biotech-news-dashboard-local-and-cloud-samboesen.streamlit.app/
 
 ## Features
 - Real-time news sentiment analysis
