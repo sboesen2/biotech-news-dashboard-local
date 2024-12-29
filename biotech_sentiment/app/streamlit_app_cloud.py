@@ -93,6 +93,18 @@ COMPANIES = [
 #         return []
 
 def create_sentiment_dashboard():
+    # Set page config for better social media sharing
+    st.set_page_config(
+        page_title="Biotech News Sentiment Analyzer",
+        page_icon="📊",
+        layout="wide",
+        menu_items={
+            'Get Help': 'https://github.com/sboesen2/biotech-news-dashboard-local',
+            'Report a bug': "https://github.com/sboesen2/biotech-news-dashboard-local/issues",
+            'About': "# Biotech News Sentiment Analyzer\nAnalyzing sentiment in biotech and pharmaceutical news."
+        }
+    )
+    
     st.title("Biotech News Sentiment Analyzer Cloud verison")
     
     # Initialize session state for tracking
