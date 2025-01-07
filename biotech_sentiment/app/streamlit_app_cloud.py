@@ -98,7 +98,6 @@ def create_sentiment_dashboard():
         page_title="Biotech News Sentiment Analyzer",
         page_icon="📊",
         layout="centered",
-        theme="dark",
         initial_sidebar_state="expanded",
         menu_items={
             'Get Help': 'https://github.com/sboesen2/biotech-news-dashboard-local',
