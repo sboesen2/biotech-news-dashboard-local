@@ -93,13 +93,12 @@ COMPANIES = [
 #         return []
 
 def create_sentiment_dashboard():
-    # Set page config with more detailed metadata and dark theme
+    # Set page config with more detailed metadata
     st.set_page_config(
         page_title="Biotech News Sentiment Analyzer",
         page_icon="📊",
         layout="centered",
         initial_sidebar_state="expanded",
-        theme="dark",
         menu_items={
             'Get Help': 'https://github.com/sboesen2/biotech-news-dashboard-local',
             'Report a bug': "https://github.com/sboesen2/biotech-news-dashboard-local/issues",
